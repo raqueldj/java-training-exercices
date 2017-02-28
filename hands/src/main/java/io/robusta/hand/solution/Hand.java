@@ -333,7 +333,7 @@ public class Hand extends TreeSet<Card> implements IHand {
 	@Override
 	public int highestValue() {
 		// ace might be the highest value
-		return 0;
+		return this.last().getValue();
 	}
 
 	@Override
