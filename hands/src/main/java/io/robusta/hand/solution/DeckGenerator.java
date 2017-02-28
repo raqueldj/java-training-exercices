@@ -9,12 +9,15 @@ public class DeckGenerator implements IDeckGenerator {
 	@Override
 	public Deck generate() {
 		Deck deck = new Deck();
-
 		// fill the deck with cards
-        // Probably use the good modulo
-		for (int i = 1; i <= 52; i++) {
-
+		// Probably use the good modulo
+		for (int i = 1; i <= 4; i++) {
+			for (int j = 1; j <= 13; j++) {
+				Card card = new Card(j, CardColor.getByValue(i));
+				deck.add(card);
+			}
 		}
+
 		return deck;
 	}
 
