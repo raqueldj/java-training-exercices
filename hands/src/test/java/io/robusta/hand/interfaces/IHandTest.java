@@ -99,9 +99,6 @@ public class IHandTest extends PokerTest {
 	public void testTwoPair() {
 		IHand hand = newHand("4c 4h 2c 2s Qc");
 		assertEquals(HandClassifier.TWO_PAIR, hand.getClassifier());
-		
-		hand = newHand("4c 5c 2c 3c Qc");
-		assertTrue(hand.toString(), hand.isFlush());
 	}
 	
 	@Test
