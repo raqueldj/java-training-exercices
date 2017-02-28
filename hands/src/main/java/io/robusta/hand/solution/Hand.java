@@ -46,10 +46,10 @@ public class Hand extends TreeSet<Card> implements IHand {
 
 	@Override
 	public boolean isStraight() {
-		
+
 		List<Card> cards = new ArrayList<>(this);
-		for(int i = 0; i<4; i++){
-			if(cards.get(i+1).getValue() != cards.get(i).getValue()+1){
+		for (int i = 0; i < 4; i++) {
+			if (cards.get(i + 1).getValue() != cards.get(i).getValue() + 1) {
 				return false;
 			}
 		}
@@ -58,10 +58,10 @@ public class Hand extends TreeSet<Card> implements IHand {
 
 	@Override
 	public boolean isFlush() {
-		
+
 		CardColor c = this.first().getColor();
-		for(Card card : this)
-			if (card.getColor() != c){
+		for (Card card : this)
+			if (card.getColor() != c) {
 				return false;
 			}
 		return true;
@@ -89,20 +89,20 @@ public class Hand extends TreeSet<Card> implements IHand {
 		HashMap<Integer, List<Card>> map = new HashMap<>();
 
 		ArrayList<Card> list = null;
-		
-		for (Card c : this){
+
+		for (Card c : this) {
 			// fill the map
 			if (map.get(c.getValue()) == null) {
 				list = new ArrayList<Card>();
 				list.add(c);
 				map.put(c.getValue(), list);
-			}else{
+			} else {
 				list.add(c);
 				map.put(c.getValue(), list);
 			}
 
 		}
-		
+
 		return map;
 	}
 
@@ -135,7 +135,7 @@ public class Hand extends TreeSet<Card> implements IHand {
 
 	@Override
 	public boolean isPair() {
-
+		
 		return false;
 
 	}
@@ -171,28 +171,36 @@ public class Hand extends TreeSet<Card> implements IHand {
 
 	@Override
 	public boolean isStraightFlush() {
+		if (this.isFlush() && this.isStraight()) {
+			return true;
+		}
 		return false;
 	}
 
 	@Override
 	public HandValue getValue() {
 		HandValue handValue = new HandValue();
-		
-		if(this.isStraight()){
+
+		if (this.isStraight()) {
 			handValue.setClassifier(HandClassifier.STRAIGHT);
 			handValue.setLevelValue(this.last().getValue());
 		}
+
+		if (this.isFlush()) {
+			handValue.setClassifier(HandClassifier.FLUSH);
+			handValue.setOtherCards(this.remainings);
+		}
 		
-//		if(this.isFlush()){
-//			handValue.setClassifier(HandClassifier.STRAIGHT);
-//			handValue.setLevelValue(this.last().getValue());
+		if (this.isStraightFlush()) {
+			handValue.setClassifier(HandClassifier.STRAIGHT_FLUSH);
+			handValue.setLevelValue(this.last().getValue());
+		}
 
 		// Exemple for FourOfAKind ; // do for all classifiers
 		if (this.isFourOfAKind()) {
 			handValue.setClassifier(HandClassifier.FOUR_OF_A_KIND);
 			handValue.setLevelValue(this.mainValue);
 			handValue.setOtherCards(this.remainings); // or this.getRemainings()
-			return handValue;
 		}
 
 		return handValue;
