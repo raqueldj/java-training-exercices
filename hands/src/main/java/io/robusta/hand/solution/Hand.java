@@ -323,6 +323,10 @@ public class Hand extends TreeSet<Card> implements IHand {
 
 	@Override
 	public boolean hasAce() {
+
+			if(this.hasCardValue(14)){
+				return true;
+			}
 		return false;
 	}
 
