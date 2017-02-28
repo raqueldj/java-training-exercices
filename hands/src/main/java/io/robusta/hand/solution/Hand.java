@@ -135,7 +135,18 @@ public class Hand extends TreeSet<Card> implements IHand {
 
 	@Override
 	public boolean isPair() {
+		Map<Integer, List<Card>> group = group();
+		List<Card> cards;
 		
+		if(group.size() == 4){
+			for (List<Card> rows: group.values()){
+				if (rows.size() == 2){
+					mainValue = rows.get(0).getValue();
+				}
+			}
+			
+			return true;
+		}
 		return false;
 
 	}
@@ -188,19 +199,25 @@ public class Hand extends TreeSet<Card> implements IHand {
 
 		if (this.isFlush()) {
 			handValue.setClassifier(HandClassifier.FLUSH);
-			handValue.setOtherCards(this.remainings);
+			handValue.setOtherCards(this.getGroupRemainingsCard(this.group()));
 		}
 		
 		if (this.isStraightFlush()) {
 			handValue.setClassifier(HandClassifier.STRAIGHT_FLUSH);
 			handValue.setLevelValue(this.last().getValue());
 		}
+		
+		if (this.isPair()) {
+			handValue.setClassifier(HandClassifier.PAIR);
+			handValue.setLevelValue(this.mainValue);
+			handValue.setOtherCards(this.getGroupRemainingsCard(this.group()));
+		}
 
 		// Exemple for FourOfAKind ; // do for all classifiers
 		if (this.isFourOfAKind()) {
 			handValue.setClassifier(HandClassifier.FOUR_OF_A_KIND);
 			handValue.setLevelValue(this.mainValue);
-			handValue.setOtherCards(this.remainings); // or this.getRemainings()
+			handValue.setOtherCards(this.getGroupRemainingsCard(this.group())); // or this.getRemainings()
 		}
 
 		return handValue;
