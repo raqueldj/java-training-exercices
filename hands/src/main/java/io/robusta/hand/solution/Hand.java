@@ -30,7 +30,7 @@ public class Hand extends TreeSet<Card> implements IHand {
 
 	@Override
 	public boolean beats(IHand villain) {
-		if(this.getValue().compareTo(villain.getValue())>0){
+		if (this.getValue().compareTo(villain.getValue()) > 0) {
 			return true;
 		}
 		return false;
@@ -295,7 +295,7 @@ public class Hand extends TreeSet<Card> implements IHand {
 			handValue.setClassifier(HandClassifier.FULL);
 			handValue.setLevelValue(this.mainValue);
 			handValue.setSecondLevel(this.secondValue);
-			//handValue.setOtherCards(this.getGroupRemainingsCard(this.group()));
+			// handValue.setOtherCards(this.getGroupRemainingsCard(this.group()));
 		}
 
 		// Exemple for FourOfAKind ; // do for all classifiers
@@ -311,6 +311,12 @@ public class Hand extends TreeSet<Card> implements IHand {
 
 	@Override
 	public boolean hasCardValue(int level) {
+
+		for (Card c : this) {
+			if(c.getValue() == level){
+				return true;
+			}
+		}
 
 		return false;
 	}
@@ -328,7 +334,7 @@ public class Hand extends TreeSet<Card> implements IHand {
 
 	@Override
 	public int compareTo(IHandResolver o) {
-		
+
 		return this.getValue().compareTo(o.getValue());
 	}
 
