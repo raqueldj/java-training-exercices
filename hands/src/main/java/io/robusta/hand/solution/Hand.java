@@ -30,7 +30,7 @@ public class Hand extends TreeSet<Card> implements IHand {
 
 	@Override
 	public boolean beats(IHand villain) {
-		
+
 		return false;
 	}
 
@@ -137,7 +137,6 @@ public class Hand extends TreeSet<Card> implements IHand {
 	@Override
 	public boolean isPair() {
 		Map<Integer, List<Card>> group = group();
-		List<Card> cards;
 
 		if (group.size() == 4) {
 			for (List<Card> rows : group.values()) {
@@ -156,7 +155,6 @@ public class Hand extends TreeSet<Card> implements IHand {
 	public boolean isDoublePair() {
 
 		Map<Integer, List<Card>> group = group();
-		List<Card> cards;
 
 		if (group.size() == 3) {
 			for (List<Card> rows : group.values()) {
@@ -178,25 +176,65 @@ public class Hand extends TreeSet<Card> implements IHand {
 
 	@Override
 	public boolean isHighCard() {
+		Map<Integer, List<Card>> group = group();
 
-		return true;
+		if (group.size() == 5) {
+			if (!this.isFlush() && !this.isStraight()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
 	public boolean isTrips() {
 
+		Map<Integer, List<Card>> group = group();
+
+		if (group.size() == 3) {
+			for (List<Card> rows : group.values()) {
+				if (rows.size() == 3) {
+					mainValue = rows.get(0).getValue();
+				}
+			}
+
+			return true;
+		}
 		return false;
 	}
 
 	@Override
 	public boolean isFourOfAKind() {
 
+		Map<Integer, List<Card>> group = group();
+
+		if (group.size() == 2) {
+			for (List<Card> rows : group.values()) {
+				if (rows.size() == 4) {
+					mainValue = rows.get(0).getValue();
+				}
+			}
+
+			return true;
+		}
 		return false;
 
 	}
 
 	@Override
 	public boolean isFull() {
+
+		Map<Integer, List<Card>> group = group();
+
+		if (group.size() == 2) {
+			for (List<Card> rows : group.values()) {
+				if (rows.size() == 3) {
+					mainValue = rows.get(0).getValue();
+
+				}
+			}
+			return true;
+		}
 		return false;
 	}
 
@@ -232,9 +270,21 @@ public class Hand extends TreeSet<Card> implements IHand {
 			handValue.setLevelValue(this.mainValue);
 			handValue.setOtherCards(this.getGroupRemainingsCard(this.group()));
 		}
-		
+
 		if (this.isDoublePair()) {
 			handValue.setClassifier(HandClassifier.TWO_PAIR);
+			handValue.setLevelValue(this.mainValue);
+			handValue.setOtherCards(this.getGroupRemainingsCard(this.group()));
+		}
+
+		if (this.isHighCard()) {
+			handValue.setClassifier(HandClassifier.HIGH_CARD);
+			handValue.setLevelValue(this.last().getValue());
+			handValue.setOtherCards(this.getGroupRemainingsCard(this.group()));
+		}
+		
+		if (this.isFull()) {
+			handValue.setClassifier(HandClassifier.FULL);
 			handValue.setLevelValue(this.mainValue);
 			handValue.setOtherCards(this.getGroupRemainingsCard(this.group()));
 		}
